@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EpidemiaSim - Simulador Espacial de Contagios</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <header class="header">
+            <h1>EpidemiaSim: Modelo SIR Espacial</h1>
+        </header>
+        
+        <aside class="sidebar">
+            <div class="control-group">
+                <h3>Controles Principales</h3>
+                <div class="button-row">
+                    <button id="btn-start">Iniciar / Pausar</button>
+                    <button id="btn-reset">Reiniciar</button>
+                    <button id="btn-speed">Velocidad: 1x</button>
+                </div>
+                <div class="preset-row">
+                    <select id="preset-select">
+                        <option value="none">-- Seleccionar Preset --</option>
+                        <option value="libre">Sin Medidas (Propagación Libre)</option>
+                        <option value="distanciamiento">Distanciamiento Social (70% quietos)</option>
+                        <option value="rebaño">Inmunidad de Rebaño (75% Vacunados)</option>
+                        <option value="cuarentena">Cuarentena con Barrera Central</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Parámetros de Simulación</h3>
+                <label>Semilla PRNG (Opcional): <input type="number" id="seed-input" value="42"></label>
+                
+                <label>Población (<span id="val-pop">200</span>)
+                    <input type="range" id="slider-pop" min="100" max="300" step="1" value="200">
+                </label>
+                <label>Radio de Contagio (<span id="val-radius">20</span>px)
+                    <input type="range" id="slider-radius" min="5" max="50" step="1" value="20">
+                </label>
+                <label>Prob. de Contagio (<span id="val-prob">50</span>%)
+                    <input type="range" id="slider-prob" min="1" max="100" step="1" value="50">
+                </label>
+                <label>Duración Infección (<span id="val-duration">300</span> ticks)
+                    <input type="range" id="slider-duration" min="50" max="1000" step="10" value="300">
+                </label>
+                <label>Distanciamiento Social (<span id="val-dist">0</span>%)
+                    <input type="range" id="slider-dist" min="0" max="100" step="1" value="0">
+                </label>
+                <label>Vacunación Inicial (<span id="val-vax">0</span>%)
+                    <input type="range" id="slider-vax" min="0" max="100" step="1" value="0">
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="check-barrier"> Habilitar Barrera Central
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="check-gate" disabled> Abrir Compuerta
+                </label>
+            </div>
+            
+            <div class="control-group metrics-box">
+                <h3>Métricas en Vivo</h3>
+                <div class="metric susceptible">Susceptibles: <span id="count-s">0</span></div>
+                <div class="metric infected">Infectados: <span id="count-i">0</span></div>
+                <div class="metric recovered">Recuperados: <span id="count-r">0</span></div>
+                <div class="metric immune">Inmunes/Vac.: <span id="count-v">0</span></div>
+                <div class="metric peak">Pico Máx. Inf.: <span id="count-peak">0</span></div>
+                <button id="btn-export" style="margin-top: 10px;">Exportar Historial (CSV)</button>
+            </div>
+        </aside>
+
+        <main class="main-content">
+            <div class="canvas-container">
+                <canvas id="sim-canvas" width="640" height="440"></canvas>
+                <p class="hint">Interactividad: Haz clic en la arena para "Inyectar Paciente Cero" en el susceptible más cercano.</p>
+            </div>
+            <div class="chart-container">
+                <canvas id="chart-canvas" width="640" height="150"></canvas>
+            </div>
+        </main>
+    </div>
+    <script src="app.js"></script>
+</body>
+</html>
